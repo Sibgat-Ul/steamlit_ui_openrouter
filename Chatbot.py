@@ -1,22 +1,22 @@
 from openai import OpenAI
 import streamlit as st
 from streamlit_chat import message
-from components.Sidebar import sidebar
+# from components.Sidebar import sidebar
 import json
 from shared import constants
 
-api_key = "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" 
+api_key = "" 
 selected_model = "google/gemma-3-27b-it:free"
 OPENROUTER_BASE = "https://openrouter.ai"
 OPENROUTER_API_BASE = f"{OPENROUTER_BASE}/api/v1"
 
 st.title("💬 Streamlit GPT")
+
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
-        {"role": "system", "content": "You are a knowledgeable and friendly assistant who provides clear, concise answers. Always be helpful and professional."},
+        {"role": "user", "content": "You are an helpful assistant."},
         {"role": "assistant", "content": "How can I help you?"}
     ]
-
 
 with st.form("chat_input", clear_on_submit=True):
     a, b = st.columns([4, 1])
@@ -29,8 +29,14 @@ with st.form("chat_input", clear_on_submit=True):
 
     b.form_submit_button("Send", use_container_width=True)
 
-for i, msg in enumerate(st.session_state.messages):
-    message(msg["content"], is_user=msg["role"] == "user", key=i)
+    for i, msg in enumerate(st.session_state.messages):
+        if i not in [0]:
+            message(msg["content"], is_user=msg["role"] == "user", key=str(i))
+
+#     if msg["role"] == "user":
+#         message(msg["content"], is_user=True, key=str(i))
+#     elif msg["role"] == "assistant":
+#         message(msg["content"], key=str(i))
 
 if user_input and not api_key:
     st.info("Please click Connect OpenRouter to continue.")
@@ -49,6 +55,6 @@ if user_input and api_key:
     
     if type(response) == str:
         response = json.loads(response)
-    msg = response["choices"][0]["message"]
+    msg = response.choices[0].message
     st.session_state.messages.append(msg)
-    message(msg["content"])
+    message(msg.content)
