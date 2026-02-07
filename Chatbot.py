@@ -5,7 +5,7 @@ from components.Sidebar import sidebar
 import json
 from shared import constants
 
-api_key = ""
+api_key = "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" 
 selected_model = "google/gemma-3-27b-it:free"
 OPENROUTER_BASE = "https://openrouter.ai"
 OPENROUTER_API_BASE = f"{OPENROUTER_BASE}/api/v1"
@@ -13,6 +13,7 @@ OPENROUTER_API_BASE = f"{OPENROUTER_BASE}/api/v1"
 st.title("💬 Streamlit GPT")
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
+        {"role": "system", "content": "You are a knowledgeable and friendly assistant who provides clear, concise answers. Always be helpful and professional."},
         {"role": "assistant", "content": "How can I help you?"}
     ]
 
